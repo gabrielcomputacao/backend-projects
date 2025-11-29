@@ -1,8 +1,4 @@
-import { readFile } from "node:fs";
-import { catchErrors } from "./errors/getError.js";
-const arg = process.argv;
 
-const path = arg[2];
 
 function cleanWords(text) {
   return text.replace(/[.,/\#!$%\^&\*;:{=\-_'~()]/g, "");
@@ -28,7 +24,7 @@ function extractParagraph(text) {
   return paragraphs;
 }
 
-function countWords(text) {
+export function countWords(text) {
   // * Nesse caso FlatMap é mais performático, pois nao precisa fazer um filter e um map
 
   const paragraphs = extractParagraph(text);
@@ -38,13 +34,6 @@ function countWords(text) {
     return verifyDuplicateWord(paragraph);
   });
 
-  console.log(counts);
+  return counts;
 }
 
-readFile(path, "utf-8", (error, text) => {
-    try {
-        countWords(text);
-    } catch (err) {
-       catchErrors(err)
-    }
-});
