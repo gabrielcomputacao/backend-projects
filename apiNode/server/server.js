@@ -1,11 +1,8 @@
+import "dotenv/config";
+import app from "../src/app.js";
 
+const PORT = 3005;
 
-import app from '../src/app.js'
-
-const PORT = 3005
-
-
-app.listen( PORT, () =>{
-    console.log(`servidor escutando na porta ${PORT}`);
-    
-} )
+app.listen(PORT, () => {
+  console.log(`servidor escutando na porta ${PORT}`);
+});
