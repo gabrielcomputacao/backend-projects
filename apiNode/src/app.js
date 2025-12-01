@@ -1,5 +1,17 @@
 
 import express from 'express'
+import connectDatabase from './config/dbConnect.js'
+
+const connect = await connectDatabase();
+
+connect.on("error", (err) =>{
+    console.log("deu erro", err);
+})
+
+connect.once("open", () =>{
+    console.log("Banco conectado");
+    
+})
 
 const app = express()
 // * middeware que passa por todas as requisicoes e a requisicao ele transforma em dados json
@@ -70,5 +82,7 @@ app.delete("/livros/:id", (req,res) =>{
 
 
 })
+
+
 
 export default app;
