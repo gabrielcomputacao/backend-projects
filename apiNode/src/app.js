@@ -16,14 +16,4 @@ const app = express();
 routes(app);
 
 
-app.delete("/livros/:id", (req, res) => {
-  const id = req.params.id;
-
-  // livros = livros.filter( livro => livro.id !== Number(id) )
-  const index = livros.findIndex((livro) => livro.id === Number(id));
-  livros.splice(index, 1);
-
-  res.status(200).send("livro removido");
-});
-
 export default app;

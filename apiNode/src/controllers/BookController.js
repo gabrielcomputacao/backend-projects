@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { author } from "../models/Author.js";
 import book from "../models/Book.js";
 
@@ -39,11 +40,19 @@ class BookController {
       const id = req.params.id;
       const dataBook = await book.findById(id);
 
-      res.status(200).json({ message: "Livro encontrado", book: dataBook });
+      if (dataBook) {
+        res.status(200).json({ message: "Livro encontrado", book: dataBook });
+      } else {
+        res.status(404).json({ message: "Livro não encontrado" });
+      }
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: `${error.message} - falha para consultar livro ` });
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(400).json({ message: "Dado informado incorretamente." });
+      } else {
+        res
+          .status(500)
+          .json({ message: `${error.message} - falha para consultar livro ` });
+      }
     }
   }
 
@@ -71,9 +80,8 @@ class BookController {
   }
 
   static async searchBooksToPublisher(req, res) {
-    const publisher = req.query.publisher 
+    const publisher = req.query.publisher;
     try {
-
       const bookSearched = await book.find({ publisher: publisher });
       res.status(200).json({ message: "Livro buscado", book: bookSearched });
     } catch (error) {
