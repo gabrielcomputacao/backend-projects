@@ -1,3 +1,4 @@
+import { author } from "../models/Author.js";
 import book from "../models/Book.js";
 
 class BookController {
@@ -14,11 +15,18 @@ class BookController {
   }
 
   static async createBook(req, res) {
+    const newBook = req.body;
+
     try {
-      const newBook = await book.create(req.body);
+      const newAuthor = await author.findById(newBook.author);
+      const finalBook = { ...newBook, author: { ...newAuthor._doc } };
+
+      const createBook = await book.create(finalBook);
 
       // * 201 , codigo para algo cadastrado
-      res.status(201).json({ message: " Criado com sucesso", book: newBook });
+      res
+        .status(201)
+        .json({ message: " Criado com sucesso", book: createBook });
     } catch (error) {
       res
         .status(500)
@@ -59,6 +67,19 @@ class BookController {
       res.status(200).json({ message: "Livro deletado" });
     } catch (error) {
       res.status(500).json({ message: `${error.message} - falha ao deletar` });
+    }
+  }
+
+  static async searchBooksToPublisher(req, res) {
+    const publisher = req.query.publisher 
+    try {
+
+      const bookSearched = await book.find({ publisher: publisher });
+      res.status(200).json({ message: "Livro buscado", book: bookSearched });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: `${error.message} - falha ao buscar livro` });
     }
   }
 }
