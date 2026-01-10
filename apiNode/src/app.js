@@ -1,6 +1,7 @@
 import express from "express";
 import connectDatabase from "./config/dbConnect.js";
 import routes from "./routes/index.js";
+import { errorHandling } from "./middleware/errorHandling.js";
 
 const connect = await connectDatabase();
 
@@ -14,6 +15,13 @@ connect.once("open", () => {
 
 const app = express();
 routes(app);
+
+// Middleware de erro do express
+// ? Passando esses quatro parametros com erro sendo o primeiro , o express identifica que é um middleware de error
+// ? Middleware intercepta sempre que é um erro
+app.use((erro, req,res,next) =>{
+  errorHandling(erro, req,res,next);
+})
 
 
 export default app;

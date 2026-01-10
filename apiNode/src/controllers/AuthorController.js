@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+
 import { author } from "../models/Author.js";
 
 class AuthorController {
@@ -29,7 +29,7 @@ class AuthorController {
     }
   }
 
-  static async getAuthor(req, res) {
+  static async getAuthor(req, res, next) {
     try {
       const id = req.params.id;
       const dataAuthor = await author.findById(id);
@@ -43,12 +43,10 @@ class AuthorController {
         res.status(404).json({ message: "Autor não encontrado." });
       }
     } catch (error) {
-      if(error instanceof mongoose.Error.CastError){
-        res.status(400).json({message: 'Tipo de ID não suportado'})
-      }
-      res
-        .status(500)
-        .json({ message: `${error.message} - falha para consultar author ` });
+      // Passando o error para o next, ele linka com o middleware criado em app
+      next(error);
+
+     
     }
   }
 
