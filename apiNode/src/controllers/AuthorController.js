@@ -14,7 +14,7 @@ class AuthorController {
     }
   }
 
-  static async createAuthor(req, res) {
+  static async createAuthor(req, res, next) {
     try {
       const newAuthor = await author.create(req.body);
 
@@ -23,9 +23,8 @@ class AuthorController {
         .status(201)
         .json({ message: " Criado com sucesso", author: newAuthor });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: `${error.message} - falha para cadastrar author` });
+      // * Comando para passar para o middleware de erro do express, la ele resolve o erro
+      next(error);
     }
   }
 
