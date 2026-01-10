@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { author } from "../models/Author.js";
 
 class AuthorController {
@@ -18,7 +19,9 @@ class AuthorController {
       const newAuthor = await author.create(req.body);
 
       // * 201 , codigo para algo cadastrado
-      res.status(201).json({ message: " Criado com sucesso", author: newAuthor });
+      res
+        .status(201)
+        .json({ message: " Criado com sucesso", author: newAuthor });
     } catch (error) {
       res
         .status(500)
@@ -31,8 +34,18 @@ class AuthorController {
       const id = req.params.id;
       const dataAuthor = await author.findById(id);
 
-      res.status(200).json({ message: "Author encontrado", book: dataAuthor });
+      if (dataAuthor !== null) {
+        res
+          .status(200)
+          .json({ message: "Author encontrado", book: dataAuthor });
+      } else {
+        // Recurso não localizado - Not Found
+        res.status(404).json({ message: "Autor não encontrado." });
+      }
     } catch (error) {
+      if(error instanceof mongoose.Error.CastError){
+        res.status(400).json({message: 'Tipo de ID não suportado'})
+      }
       res
         .status(500)
         .json({ message: `${error.message} - falha para consultar author ` });
