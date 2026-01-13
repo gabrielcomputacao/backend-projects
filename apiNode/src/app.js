@@ -2,6 +2,7 @@ import express from "express";
 import connectDatabase from "./config/dbConnect.js";
 import routes from "./routes/index.js";
 import { errorHandling } from "./middleware/errorHandling.js";
+import { notFoundHandling } from "./middleware/notFoundHandling.js";
 
 const connect = await connectDatabase();
 
@@ -15,6 +16,9 @@ connect.once("open", () => {
 
 const app = express();
 routes(app);
+
+// * Middleware tratamento de erro 404
+app.use(notFoundHandling);
 
 // Middleware de erro do express
 // ? Passando esses quatro parametros com erro sendo o primeiro , o express identifica que é um middleware de error
