@@ -5,13 +5,15 @@ import Pessoa from "./Pessoa.js";
 class Trabalhador extends Pessoa {
   // * Classes estaticas estao ligadas a classe como um todo , e nao como uma instancia especifica
   static vontade = 100;
+  #privateValue
 
-  constructor(nome, altura, cargo, preco, ano) {
+  constructor(nome, altura, cargo, preco, ano,privateValue) {
     super(nome, altura);
     this.cargo = cargo;
     this.salario = 40000;
     // * Esse é o conceito de composição, quando uma classe tem outra classse dentro de si
     this.carro = new Carro(preco, ano);
+    this.#privateValue = privateValue;
   }
 
   trabalhar() {
@@ -32,6 +34,15 @@ class Trabalhador extends Pessoa {
   static pensar(){
     console.log('teste trabalhador pensar');
     
+  }
+
+
+  get privateValue() {
+    return this.#privateValue
+  }
+  
+  set privateValue(data){
+    this.#privateValue = data
   }
 
 
