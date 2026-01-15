@@ -47,12 +47,16 @@ class AuthorController {
     }
   }
 
-  static async updateAuthor(req, res) {
+  static async updateAuthor(req, res, next) {
     try {
       const id = req.params.id;
       await author.findByIdAndUpdate(id, req.body);
 
-      res.status(200).json({ message: "Author atualizado" });
+      if (id !== null) {
+        res.status(200).json({ message: "Author atualizado" });
+      } else {
+        next(new NotFound("Id não encontrado."));
+      }
     } catch (error) {
       res
         .status(500)
