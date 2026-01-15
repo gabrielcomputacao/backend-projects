@@ -1,4 +1,6 @@
+import { NotFound } from "../errors/notFoundError.js";
 
-export function notFoundHandling(req,res,next){
-    res.status(404).json({message: "Página não encontrada."})
+export function notFoundHandling(req,res,next){ 
+   const errorNotFound = new NotFound();
+   next(errorNotFound);
 }

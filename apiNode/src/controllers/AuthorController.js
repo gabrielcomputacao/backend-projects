@@ -1,4 +1,4 @@
-
+import { NotFound } from "../errors/notFoundError.js";
 import { author } from "../models/Author.js";
 
 class AuthorController {
@@ -39,13 +39,11 @@ class AuthorController {
           .json({ message: "Author encontrado", book: dataAuthor });
       } else {
         // Recurso não localizado - Not Found
-        res.status(404).json({ message: "Autor não encontrado." });
+        next(new NotFound("ID não encontrado."));
       }
     } catch (error) {
       // Passando o error para o next, ele linka com o middleware criado em app
       next(error);
-
-     
     }
   }
 

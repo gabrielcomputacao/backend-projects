@@ -17,6 +17,11 @@ connect.once("open", () => {
 const app = express();
 routes(app);
 
+// ? As Rotas são analisadas sequencialmente
+// ? Se ele não encontrar a pagina ele nao lança erro, devolve uma pagina html, por isso criamos o app.use(notFoundHandling)
+// ? Caso nenhuma rota tenha sido encontrada no routes(app) ele vai chamar a notFoundHandling
+
+
 // * Middleware tratamento de erro 404
 app.use(notFoundHandling);
 
