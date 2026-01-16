@@ -8,6 +8,7 @@ const routes = express.Router()
 
 routes.get("/livros", BookController.listBooks)
 routes.get("/livros/busca", BookController.searchBooksToPublisher)
+routes.get("/livros/search", BookController.searchData)
 routes.get("/livros/:id", BookController.getBook)
 routes.post("/livros", BookController.createBook)
 routes.put("/livros/:id", BookController.updateBook)

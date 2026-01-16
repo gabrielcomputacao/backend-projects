@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { author, book } from "../models/index.js";
 
-
 class BookController {
   static async listBooks(req, res) {
     try {
@@ -88,6 +87,26 @@ class BookController {
       res
         .status(500)
         .json({ message: `${error.message} - falha ao buscar livro` });
+    }
+  }
+
+  static async searchData(req, res, next) {
+    const { title, publisher } = req.query;
+
+    try {
+      const search = {};
+
+      if (title) search.title = title;
+      if (publisher) search.publisher = publisher;
+
+      // * Passando o objeto para o mongoose , ele ja sabe onde procurar , a busca dele é inteligente
+      // * O campo publisher no objeto é o mesmo do objeto que tem no mongoose
+      
+      const resultSearch = await book.find(search);
+
+      res.status(200).json(resultSearch);
+    } catch (error) {
+      next(error);
     }
   }
 }
