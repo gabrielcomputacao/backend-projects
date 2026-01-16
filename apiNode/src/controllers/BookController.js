@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { author } from "../models/Author.js";
-import book from "../models/Book.js";
+import { author, book } from "../models/index.js";
+
 
 class BookController {
   static async listBooks(req, res) {
