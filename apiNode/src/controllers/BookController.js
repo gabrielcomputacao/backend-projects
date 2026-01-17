@@ -93,10 +93,17 @@ class BookController {
   static async searchData(req, res, next) {
     const { title, publisher } = req.query;
 
+    // = Regex por meio do javascript
+    const regex = new RegExp(title,"i");
+
     try {
       const search = {};
 
-      if (title) search.title = title;
+      // = regex por meio dos recursos proprioes do mongoose
+      //if (title) search.title = { $regex: title, $options: "i" };
+
+
+      if (title) search.title = regex;
       if (publisher) search.publisher = publisher;
 
       // * Passando o objeto para o mongoose , ele ja sabe onde procurar , a busca dele é inteligente
