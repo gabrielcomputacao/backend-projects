@@ -1,12 +1,14 @@
 import express from 'express'
 import BookController from '../controllers/BookController.js'
+import { pagination } from '../middleware/pagination.js'
 
 const routes = express.Router()
 
 // * O express tem uma paritcularidade que é necessario organizar as rotas da mais complexa para a menos complexa
 // * Ele pode se confundir caso uma menos complexa esteja em cima
 
-routes.get("/livros", BookController.listBooks)
+// ² Para colocar um middleware em uma rota, acrescenta um parametro na rota, no exemplo é pagination
+routes.get("/livros", BookController.listBooks, pagination)
 routes.get("/livros/busca", BookController.searchBooksToPublisher)
 routes.get("/livros/search", BookController.searchData)
 routes.get("/livros/:id", BookController.getBook)
