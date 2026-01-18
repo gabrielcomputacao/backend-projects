@@ -91,10 +91,10 @@ class BookController {
   }
 
   static async searchData(req, res, next) {
-    const { title, publisher } = req.query;
+    const { title, publisher, numMax, numMin, nameAuthor } = req.query;
 
     // = Regex por meio do javascript
-    const regex = new RegExp(title,"i");
+    const regex = new RegExp(title, "i");
 
     try {
       const search = {};
@@ -102,13 +102,28 @@ class BookController {
       // = regex por meio dos recursos proprioes do mongoose
       //if (title) search.title = { $regex: title, $options: "i" };
 
-
       if (title) search.title = regex;
       if (publisher) search.publisher = publisher;
+      if (numMin) search.pages = { $gte: numMin };
+      if (numMax) search.pages = { ...search.pages, $lte: numMax };
+
+      if (nameAuthor) {
+        const authorResult = await author.findOne({ name: nameAuthor });
+
+        if (authorResult !== null) {
+          search.author = authorResult;
+        } else {
+          // ² Caso a pessoa buscou por um autor e não encontrou , a lista retornanda de volta é vazia
+          //² Nesse caso não é viavel mandar um erro, e sim uma lista vazia
+          res.status(200).json([]);
+          return
+        }
+      }
 
       // * Passando o objeto para o mongoose , ele ja sabe onde procurar , a busca dele é inteligente
       // * O campo publisher no objeto é o mesmo do objeto que tem no mongoose
-      
+
+      console.log(search);
       const resultSearch = await book.find(search);
 
       res.status(200).json(resultSearch);
