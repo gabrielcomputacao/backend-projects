@@ -1,17 +1,36 @@
 import mongoose from "mongoose";
 import { author, book } from "../models/index.js";
+import BaseError from "../errors/baseError.js";
+import { NormalError } from "../errors/normalError.js";
 
 class BookController {
   static async listBooks(req, res) {
-    try {
-      const listBooks = await book.find({});
+    // ² Como fazer pagination usando mongoose, tem a função skip e limit na propria models
+    let { page = 1, limit = 5, field = "_id", order= 1 } = req.query;
 
-      res.status(200).json(listBooks);
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: `${error.message} - falha para cadastrar livro` });
+    page = parseInt(page);
+    limit = parseInt(limit);
+    order = parseInt(order)
+
+    if (page > 0 && limit > 0) {
+
+      // ² sort => Ordena os dados, o mongoose aceita -1 para decrescente e 1 para crescente
+
+      try {
+        const listBooks = await book
+        .find({})
+        .sort({ [field]: order })
+          .skip((page - 1) * limit)
+          .limit(limit);
+
+        res.status(200).json(listBooks);
+        return;
+      } catch (error) {
+        next(error);
+      }
     }
+
+    next(new NormalError("Dados Inválidos"));
   }
 
   static async createBook(req, res) {
@@ -91,7 +110,15 @@ class BookController {
   }
 
   static async searchData(req, res, next) {
-    const { title, publisher, numMax, numMin, nameAuthor } = req.query;
+    const {
+      title,
+      publisher,
+      numMax,
+      numMin,
+      nameAuthor,
+      page = 1,
+      limitPages = 5,
+    } = req.query;
 
     // = Regex por meio do javascript
     const regex = new RegExp(title, "i");
@@ -116,7 +143,7 @@ class BookController {
           // ² Caso a pessoa buscou por um autor e não encontrou , a lista retornanda de volta é vazia
           //² Nesse caso não é viavel mandar um erro, e sim uma lista vazia
           res.status(200).json([]);
-          return
+          return;
         }
       }
 
@@ -124,7 +151,10 @@ class BookController {
       // * O campo publisher no objeto é o mesmo do objeto que tem no mongoose
 
       console.log(search);
-      const resultSearch = await book.find(search);
+      const resultSearch = await book
+        .find(search)
+        .skip((page - 1) * limitPages)
+        .limit(limitPages);
 
       res.status(200).json(resultSearch);
     } catch (error) {

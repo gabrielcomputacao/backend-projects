@@ -3,6 +3,9 @@ class BaseError extends Error {
     super();
     this.message = message;
     this.status = status;
+
+
+    Object.setPrototypeOf(this, new.target.prototype)
   }
 
   sendMesssageErro(res) {
