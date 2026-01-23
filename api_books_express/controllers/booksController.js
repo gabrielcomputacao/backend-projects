@@ -1,9 +1,13 @@
+import fs from 'fs'
+
 export class BooksController {
   static getBooks(req, res) {
     try {
-      res.status(200).send("getBooks");
-    } catch (error) {
-      res.status(500).send("erro to get books");
+      // = readFileSyn pega o caminho de outra referencia , por isso so passamos o nome do arquivo, ele ja encontra
+      const dataBooks = JSON.parse(fs.readFileSync('dataBase.json'))
+      res.status(200).send(dataBooks);
+    } catch (err) {
+      res.status(500).send(err.message);
     }
   }
 }
