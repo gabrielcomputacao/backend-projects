@@ -28,4 +28,23 @@ export class BooksController {
       res.status(500).send(err.message);
     }
   }
+
+  static updateBook(req,res){
+    try {
+      BookService.patchBook(req)
+      res.status(200).send("livro atualizado com sucesso!")
+    } catch (error) {
+      res.status(500).send(error.message)
+    }
+  }
+
+  static deleteBook(req,res){
+    try {
+      BookService.deletedBook(req)
+       res.status(200).send("livro deletado com sucesso!")
+    } catch (error) {
+      res.status(500).send(error,message)
+    }
+  }
+
 }
