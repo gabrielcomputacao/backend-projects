@@ -18,4 +18,14 @@ export class BooksController {
       res.status(500).send(err.message);
     }
   }
+
+  static createBook(req, res) {
+    try {
+      
+      BookService.saveBook(req);
+      res.status(201).send("Livro criado com sucesso!");
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  }
 }

@@ -9,6 +9,8 @@ server.get('/', (req, res) =>{
     res.send('Hi Node test 2')
 })
 
+// ² Faz com que o Node consiga receber dados json
+server.use(express.json())
 server.use(routes)
 
 

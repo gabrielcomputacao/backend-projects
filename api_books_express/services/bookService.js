@@ -8,10 +8,20 @@ export class BookService {
   }
   static getBookWithId(req) {
     const listBooks = JSON.parse(fs.readFileSync("dataBase.json"));
-    const { path} = req;
-    const dataPath = path.split('/')
-   
-    const book = listBooks.find( book => book.id == dataPath[2] )
+    const id = req.params.id;
+
+    const book = listBooks.find((book) => book.id == id);
     return book;
+  }
+  static saveBook(req) {
+    const data = req.body;
+    
+    const listBooks = JSON.parse(fs.readFileSync("dataBase.json"));
+    console.log(listBooks);
+    
+    if (data) {
+      fs.writeFileSync("dataBase.json", JSON.stringify( [...listBooks, data ]));
+    }
+    return
   }
 }
