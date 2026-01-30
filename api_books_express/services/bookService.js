@@ -17,7 +17,6 @@ export class BookService {
     const data = req.body;
 
     const listBooks = JSON.parse(fs.readFileSync("dataBase.json"));
-    console.log(listBooks);
 
     if (data) {
       fs.writeFileSync("dataBase.json", JSON.stringify([...listBooks, data]));
