@@ -1,0 +1,7 @@
+
+FROM NODE:20
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
+ENTRYPOINT npx nodemon server.js
