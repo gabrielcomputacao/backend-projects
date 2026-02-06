@@ -12,9 +12,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@sequelize/postgres": "^7.0.0-alpha.48",
     "express": "^5.2.1",
     "nodemon": "^3.1.11",
+    "pg": "^8.18.0",
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.5",
     "sqlite3": "^5.1.7"
