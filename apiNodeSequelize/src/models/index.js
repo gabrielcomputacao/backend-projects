@@ -1,17 +1,13 @@
-import fs from "fs";
-import path from "path";
-import Sequelize from "sequelize";
-import process from "process";
-import { fileURLToPath } from "url";
-
-// __dirname e __filename no ES Module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const process = require('process');
 
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || "development";
+const env = process.env.NODE_ENV || 'development';
 
-import configJson from "../config/config.json" assert { type: "json" };
+// carregando JSON
+const configJson = require('../config/config.json');
 const config = configJson[env];
 
 const db = {};
@@ -24,22 +20,25 @@ if (config.use_env_variable) {
     config.database,
     config.username,
     config.password,
-    config,
+    config
   );
 }
 
 fs.readdirSync(__dirname)
   .filter(
     (file) =>
-      file.indexOf(".") !== 0 &&
+      file.indexOf('.') !== 0 &&
       file !== basename &&
-      file.endsWith(".js") &&
-      !file.endsWith(".test.js"),
+      file.endsWith('.js') &&
+      !file.endsWith('.test.js')
   )
-  .forEach(async (file) => {
-    const { default: modelDef } = await import(path.join(__dirname, file));
+  .forEach((file) => {
+    const modelDef = require(path.join(__dirname, file));
 
-    const model = modelDef(sequelize, Sequelize.DataTypes);
+    // se vier como default (caso misto ESM)
+    const modelFactory = modelDef.default || modelDef;
+
+    const model = modelFactory(sequelize, Sequelize.DataTypes);
     db[model.name] = model;
   });
 
@@ -52,4 +51,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-export default db;
+module.exports = db;
