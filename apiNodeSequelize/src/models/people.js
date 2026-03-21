@@ -1,3 +1,4 @@
+const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class People extends Sequelize.Model {}
 
