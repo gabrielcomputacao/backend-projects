@@ -1,15 +1,10 @@
-const database = require('../models/index')
+const PeopleService = require("../services/PeopleService.js");
+const Controller = require("./Controller.js");
+const peopleService = new PeopleService();
 
-class PeopleController {
-  static async getAllPeople(req, res) {
-    try {
-
-       const dataPeople = await database.People.findAll();
-       res.status(200).json(dataPeople)
-
-    } catch (error) {
-        throw error;
-    }
+class PeopleController extends Controller {
+  constructor() {
+    super(peopleService);
   }
 }
 
