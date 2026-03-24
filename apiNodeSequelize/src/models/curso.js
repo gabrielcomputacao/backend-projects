@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
   }
-  Curso.init({
+  Course.init({
     titulo: DataTypes.STRING,
     descricao: DataTypes.STRING,
     data_inicio: DataTypes.DATEONLY

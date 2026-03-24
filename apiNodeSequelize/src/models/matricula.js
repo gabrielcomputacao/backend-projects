@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
   }
-  Matricula.init({
+  Registration.init({
     status: DataTypes.STRING
   }, {
     sequelize,
