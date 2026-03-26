@@ -5,6 +5,22 @@ class Services {
     this.model = model;
   }
 
+  async createData(data) {
+    try {
+      const user = await database[this.model].create({ ...data });
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getById(id) {
+    const user = await database[this.model].findAll({
+      where: { id: id },
+    });
+    return user;
+  }
+
   async getAll() {
     const data = await database[this.model].findAll();
     return data;
@@ -20,6 +36,24 @@ class Services {
     }
 
     return true;
+  }
+
+  async excludeData(id) {
+    try {
+      const listRowsEffected = await database[this.model].destroy({
+        where: { id: id },
+      });
+
+      console.log(listRowsEffected);
+
+      if (listRowsEffected[0] === 0) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 
