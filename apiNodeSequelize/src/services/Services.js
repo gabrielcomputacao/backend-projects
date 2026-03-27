@@ -15,15 +15,14 @@ class Services {
   }
 
   async getById(id) {
-    const user = await database[this.model].findAll({
-      where: { id: id },
-    });
+    //  # findByPk retorna somente um registro
+    const user = await database[this.model].findByPk(Number(id));
     return user;
   }
 
   async getAll() {
-    const data = await database[this.model].findAll();
-    return data;
+    // = O Retorno já faz o await, nao precisa colocar o await quando tem o retorno direto
+    return database[this.model].findAll();
   }
 
   async updateData(data, id) {
