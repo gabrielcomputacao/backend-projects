@@ -26,6 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "people",
       timestamps: true,
       underscored: true,
+      // = Paranoid é um soft delete, ele atualiza o campo deleted, e nao exclui de verdade os dados, e tambem os relacionamentos ainda apontam para o dado que foi marcado como deletado, nao dando erro nas relações
+      paranoid: true,
     },
   );
 
